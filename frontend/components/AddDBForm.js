@@ -56,12 +56,18 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     }
   }, [errordatabasecreate, successdatabasecreate, databasecreate]);
 
-  const handleAddRow = () => {
+  const handleAddRow = (schemaId) => {
     const newRow = {
       id: rows.length + 1,
       fields: { schemaField: "", schemaType: "Number" },
     };
-    setRows([...rows, newRow]);
+    if (schemaId === rows[rows.length - 1].id) {
+      if (!rows[rows.length - 1].fields.schemaField) {
+        toast.error("Schema field is empty");
+      } else {
+        setRows([...rows, newRow]);
+      }
+    }
   };
 
   const handleRemoveRow = (id) => {
@@ -89,14 +95,15 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     rows.forEach((item) => {
       schemaObject[item.fields.schemaField] = item.fields.schemaType;
     });
+    const checkSchema = hasEmptyStringKey(schemaObject);
     const model = {
       modelName: handleModelName(dbName),
       schemaDefinition: schemaObject,
     };
-    if (dbName && model) {
+    if (dbName && model && !checkSchema) {
       dispatch(databaseCreateAction(model));
     } else {
-      toast.error("Database name is Empty...");
+      toast.error("Database name or Schema field is Empty...");
     }
   };
 
@@ -146,6 +153,7 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
                     }
                     className="border w-full px-5 py-3 focus:outline-none rounded-md"
                     placeholder="Enter Schema Field"
+                    readOnly={row.id !== rows.length}
                     required
                   />
                 </td>
@@ -176,7 +184,10 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
                 {rows.length > 0 ? (
                   <td className="px-16 py-2 flex justify-around gap-5">
                     {rows.length === row.id && (
-                      <button className="cursor" onClick={() => handleAddRow()}>
+                      <button
+                        className="cursor"
+                        onClick={() => handleAddRow(row.id)}
+                      >
                         <AiOutlinePlusSquare
                           size={25}
                           color="green"
@@ -222,5 +233,14 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     </div>
   );
 };
+
+function hasEmptyStringKey(obj) {
+  for (const key in obj) {
+    if (key === "" && obj.hasOwnProperty(key)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export default AddDBForm;
