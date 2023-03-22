@@ -60,8 +60,8 @@ export async function getModel(req, res) {
         .json({ message: "Model name does not send through request!" });
     // Get a list of available models in the database
     const modelNames = await getModelNames();
-    const schema = mongoose.model(modelName).schema;
     if (modelNames.includes(modelName)) {
+      const schema = mongoose.model(modelName).schema;
       res.status(200).json({
         message: `Model: ${modelName} found in database!`,
         model: modelName,
@@ -72,7 +72,6 @@ export async function getModel(req, res) {
       res.status(404).json({
         message: `Model: ${modelName} do not found!`,
         model: modelName,
-        schema: schema,
         found: false,
       });
     }
@@ -102,6 +101,12 @@ export async function deleteModel(req, res) {
     }
     // Drop the specified collection
     const result = await mongoose.connection.db.dropCollection(modelName);
+    if (mongoose.connection.models[modelName]) {
+      console.log("Model already exists, deleting from cache...");
+      // Clear compiled model from cache
+      delete mongoose.connection.models[modelName];
+      // delete mongoose.connection.modelSchemas[modelName];
+    }
     if (result) {
       res.status(200).json({
         message: `${modelName} collection dropped successfully!`,
