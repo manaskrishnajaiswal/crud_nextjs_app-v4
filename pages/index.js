@@ -1,17 +1,8 @@
-import { employeeDeleteAction } from "@/frontend/redux/actions/employeeActions";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { BiUserPlus, BiX, BiCheck } from "react-icons/bi";
+import { BiX, BiCheck } from "react-icons/bi";
 import { BsDatabaseAdd, BsDatabase } from "react-icons/bs";
-import AddUserForm from "@/frontend/components/AddUserForm";
-import UserTable from "@/frontend/components/usertable";
-import {
-  EMPLOYEES_GET_RESET,
-  EMPLOYEE_CREATE_RESET,
-  EMPLOYEE_DELETE_RESET,
-  EMPLOYEE_GET_RESET,
-} from "@/frontend/redux/constants/employeeConstants";
 import AddDBForm from "@/frontend/components/AddDBForm";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
