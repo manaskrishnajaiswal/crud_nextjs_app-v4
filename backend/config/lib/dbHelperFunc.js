@@ -3,10 +3,21 @@ import connectMongo from "../database/conn";
 
 // create a model
 export async function createDynamicModel(modelName, schemaDefinition) {
-  const conn = await connectMongo();
-  const schema = new mongoose.Schema(schemaDefinition, { strict: false });
-  const Model = conn.model(modelName, schema);
-  return Model;
+  await connectMongo();
+  try {
+    if (mongoose.connection.models[modelName]) {
+      console.log("Model already exists, deleting from cache...");
+      // Clear compiled model from cache
+      delete mongoose.connection.models[modelName];
+      // delete mongoose.connection.modelSchemas[modelName];
+    }
+    const schema = new mongoose.Schema(schemaDefinition, { strict: false });
+    const MyModel = mongoose.model(modelName, schema);
+    console.log("Model created:", MyModel.modelName);
+    return MyModel;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 // Get a list of available models in the database
