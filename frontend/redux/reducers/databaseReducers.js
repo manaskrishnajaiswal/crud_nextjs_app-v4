@@ -7,6 +7,10 @@ import {
   DATABASE_CREATE_REQUEST,
   DATABASE_CREATE_RESET,
   DATABASE_CREATE_SUCCESS,
+  DATABASE_DELETE_FAIL,
+  DATABASE_DELETE_REQUEST,
+  DATABASE_DELETE_RESET,
+  DATABASE_DELETE_SUCCESS,
 } from "../constants/databaseConstants";
 
 export const databaseCreateReducer = (state = {}, action) => {
@@ -33,6 +37,21 @@ export const databasesGetReducer = (state = {}, action) => {
     case DATABASES_GET_FAIL:
       return { loading: false, error: action.payload };
     case DATABASES_GET_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const databaseDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DATABASE_DELETE_REQUEST:
+      return { loading: true };
+    case DATABASE_DELETE_SUCCESS:
+      return { loading: false, success: true, databasedelete: action.payload };
+    case DATABASE_DELETE_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    case DATABASE_DELETE_RESET:
       return {};
     default:
       return state;

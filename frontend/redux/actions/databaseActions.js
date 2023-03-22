@@ -6,6 +6,9 @@ import {
   DATABASE_CREATE_FAIL,
   DATABASE_CREATE_REQUEST,
   DATABASE_CREATE_SUCCESS,
+  DATABASE_DELETE_FAIL,
+  DATABASE_DELETE_REQUEST,
+  DATABASE_DELETE_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -60,6 +63,37 @@ export const databsesGetAction = () => async (dispatch) => {
     // console.log(error);
     dispatch({
       type: DATABASES_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+// DEL /api/modelApi/modelsReq/[modeName] -> delete a model from a database
+export const databaseDeleteAction = (deleteName) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DATABASE_DELETE_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/modelApi/modelsReq/${deleteName}`,
+      config
+    );
+    dispatch({
+      type: DATABASE_DELETE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    // console.log(error);
+    dispatch({
+      type: DATABASE_DELETE_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

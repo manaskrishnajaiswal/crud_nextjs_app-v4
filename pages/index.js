@@ -16,7 +16,11 @@ import AddDBForm from "@/frontend/components/AddDBForm";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { databsesGetAction } from "@/frontend/redux/actions/databaseActions";
+import {
+  databaseDeleteAction,
+  databsesGetAction,
+} from "@/frontend/redux/actions/databaseActions";
+import { DATABASE_DELETE_RESET } from "@/frontend/redux/constants/databaseConstants";
 
 export default function Home() {
   const [deleteModelName, setDeleteModelName] = useState("");
@@ -29,12 +33,28 @@ export default function Home() {
     error: errordatabasesget,
     databasesget,
   } = databasesGet;
-
+  const databaseCreate = useSelector((state) => state.databaseCreate);
+  const {
+    loading: loadingdatabasecreate,
+    success: successdatabasecreate,
+    error: errordatabasecreate,
+    databasecreate,
+  } = databaseCreate;
+  const databaseDelete = useSelector((state) => state.databaseDelete);
+  const {
+    loading: loadingdatabasedelete,
+    success: successdatabasedelete,
+    error: errordatabasedelete,
+    databasedelete,
+  } = databaseDelete;
   useEffect(() => {
-    if (!databasesget) {
+    if (successdatabasedelete) {
+      dispatch({ type: DATABASE_DELETE_RESET });
+    }
+    if (!databasesget || successdatabasecreate || successdatabasedelete) {
       dispatch(databsesGetAction());
     }
-  }, [dispatch, databasesget]);
+  }, [dispatch, databasesget, successdatabasecreate, successdatabasedelete]);
 
   const createDBhandler = () => {
     setVisible(!visible);
@@ -50,7 +70,7 @@ export default function Home() {
 
   const deletehandler = () => {
     if (deleteModelName) {
-      dispatch(employeeDeleteAction(deleteModelName));
+      dispatch(databaseDeleteAction(deleteModelName));
       setDeleteModelName("");
     }
   };
