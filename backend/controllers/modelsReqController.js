@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { createDynamicModel, getModelNames } from "../config/lib/dbHelperFunc";
 import connectMongo from "../config/database/conn";
+import getSchemaForModel from "../config/lib/getSchemaForModel";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
 export async function createModel(req, res) {
@@ -14,7 +15,9 @@ export async function createModel(req, res) {
         found: true,
       });
     }
-    const Model = await createDynamicModel(modelName, schemaDefinition);
+    const modDBCustomSchema = await getSchemaForModel(schemaDefinition);
+    console.log(modDBCustomSchema);
+    const Model = await createDynamicModel(modelName, modDBCustomSchema);
     res.status(200).json({
       message: `Model '${modelName}' created successfully!`,
       model: Model,

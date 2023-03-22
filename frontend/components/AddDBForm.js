@@ -24,7 +24,7 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
       fields: { schemaField: "", schemaType: "Number" },
     },
   ]);
-  console.log(rows);
+
   const column_type_options = {
     Option1_number: "Number",
     Option2_string: "Text",
@@ -91,7 +91,7 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     console.log(schemaObject);
     const model = {
       modelName: dbName,
-      schemaDefinition: {},
+      schemaDefinition: schemaObject,
     };
     if (dbName && model) {
       dispatch(databaseCreateAction(model));

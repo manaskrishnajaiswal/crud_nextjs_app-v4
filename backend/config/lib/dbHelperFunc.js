@@ -11,8 +11,8 @@ export async function createDynamicModel(modelName, schemaDefinition) {
       delete mongoose.connection.models[modelName];
       // delete mongoose.connection.modelSchemas[modelName];
     }
-    const schema = new mongoose.Schema(schemaDefinition, { strict: false });
-    const MyModel = mongoose.model(modelName, schema);
+    // const schema = new mongoose.Schema(schemaModel, { strict: false });
+    const MyModel = mongoose.model(modelName, schemaDefinition);
     console.log("Model created:", MyModel.modelName);
     return MyModel;
   } catch (error) {
