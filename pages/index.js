@@ -50,6 +50,7 @@ export default function Home() {
   useEffect(() => {
     if (successdatabasedelete) {
       dispatch({ type: DATABASE_DELETE_RESET });
+      toast.success(`Database deleted successfully!!`);
     }
     if (!databasesget || successdatabasecreate || successdatabasedelete) {
       dispatch(databsesGetAction());

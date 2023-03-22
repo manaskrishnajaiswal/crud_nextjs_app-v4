@@ -6,6 +6,14 @@ import connectMongo from "../config/database/conn";
 export async function createModel(req, res) {
   const { modelName, schemaDefinition } = req.body;
   try {
+    const modelNames = await getModelNames();
+    if (modelNames.includes(modelName)) {
+      return res.status(200).json({
+        message: `Model: ${modelName} already existed in database!, No new model created!!`,
+        model: modelName,
+        found: true,
+      });
+    }
     const Model = await createDynamicModel(modelName, schemaDefinition);
     res.status(200).json({
       message: `Model '${modelName}' created successfully!`,
