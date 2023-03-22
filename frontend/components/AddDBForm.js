@@ -13,6 +13,7 @@ import {
   DATABASES_GET_RESET,
   DATABASE_CREATE_RESET,
 } from "../redux/constants/databaseConstants";
+import { handleModelName } from "../config/lib/handleModelName";
 
 const AddDBForm = ({ visible, setVisiblehandler }) => {
   const dispatch = useDispatch();
@@ -88,9 +89,8 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     rows.forEach((item) => {
       schemaObject[item.fields.schemaField] = item.fields.schemaType;
     });
-    console.log(schemaObject);
     const model = {
-      modelName: dbName,
+      modelName: handleModelName(dbName),
       schemaDefinition: schemaObject,
     };
     if (dbName && model) {
