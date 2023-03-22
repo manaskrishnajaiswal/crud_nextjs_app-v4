@@ -16,36 +16,25 @@ import AddDBForm from "@/frontend/components/AddDBForm";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { databsesGetAction } from "@/frontend/redux/actions/databaseActions";
 
 export default function Home() {
   const [deleteId, setDeleteId] = useState("");
   const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
-
-  const employeeDelete = useSelector((state) => state.employeeDelete);
+  const databasesGet = useSelector((state) => state.databasesGet);
   const {
-    loading: loadingemployeedelete,
-    success: successemployeedelete,
-    error: erroremployeedelete,
-    employeedelete,
-  } = employeeDelete;
-  const employeeCreate = useSelector((state) => state.employeeCreate);
-  const {
-    loading: loadingemployeecreate,
-    success: successemployeecreate,
-    error: erroremployeecreate,
-    employeecreate,
-  } = employeeCreate;
+    loading: loadingdatabasesget,
+    error: errordatabasesget,
+    databasesget,
+  } = databasesGet;
 
   useEffect(() => {
-    if (successemployeedelete || successemployeecreate) {
-      dispatch({ type: EMPLOYEES_GET_RESET });
-      dispatch({ type: EMPLOYEE_DELETE_RESET });
-      dispatch({ type: EMPLOYEE_CREATE_RESET });
+    if (!databasesget) {
+      dispatch(databsesGetAction());
     }
-    dispatch({ type: EMPLOYEE_GET_RESET });
-  }, [dispatch, successemployeedelete, successemployeecreate]);
+  }, [dispatch, databasesget]);
 
   const addEmployeehandler = () => {
     setVisible(!visible);
@@ -74,7 +63,7 @@ export default function Home() {
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
             integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
             crossOrigin="anonymous"
-            referrerpolicy="no-referrer"
+            referrerPolicy="no-referrer"
           />
         </Head>
         <ToastContainer position="bottom-right" />
@@ -111,26 +100,42 @@ export default function Home() {
               <></>
             )}
             <div className="py-5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              <div className="bg-white p-4 rounded-md shadow-md">
-                <div className="flex justify-between">
-                  <div className="p-2">
-                    <h6 className="text-xl  text-center font-bold">
-                      Database Name
-                    </h6>
-                    <span>grid 1</span>
-                  </div>
-                  <div className="p-2">
-                    <button
-                      onClick={addEmployeehandler}
-                      className="flex bg-indigo-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
-                    >
-                      <span className="px-1">
-                        <BsDatabase size={23}></BsDatabase>
-                      </span>
-                    </button>
-                  </div>
-                </div>
-              </div>
+              {databasesget ? (
+                databasesget.models.map((model) => (
+                  <>
+                    <div className="bg-white p-4 rounded-md shadow-md">
+                      <div className="flex justify-between">
+                        <div className="p-2">
+                          <h6 className="text-xl  text-center font-bold">
+                            Database Name
+                          </h6>
+                          <span>{model}</span>
+                        </div>
+                        <div className="p-2">
+                          <button
+                            onClick={addEmployeehandler}
+                            className="my-2 flex bg-yellow-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
+                          >
+                            <span className="px-1">
+                              <BsDatabase size={23}></BsDatabase>
+                            </span>
+                          </button>
+                          <button
+                            onClick={addEmployeehandler}
+                            className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
+                          >
+                            <span className="px-1">
+                              <BsDatabase size={23}></BsDatabase>
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                ))
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         </main>

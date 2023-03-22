@@ -9,7 +9,10 @@ import Dropdown from "./Dropdown";
 import { useDispatch, useSelector } from "react-redux";
 import { databaseCreateAction } from "../redux/actions/databaseActions";
 import { toast } from "react-toastify";
-import { DATABASE_CREATE_RESET } from "../redux/constants/databaseConstants";
+import {
+  DATABASES_GET_RESET,
+  DATABASE_CREATE_RESET,
+} from "../redux/constants/databaseConstants";
 
 const AddDBForm = ({ visible, setVisiblehandler }) => {
   const dispatch = useDispatch();
@@ -45,6 +48,7 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
     if (successdatabasecreate) {
       toast.success(databasecreate.message);
       dispatch({ type: DATABASE_CREATE_RESET });
+      dispatch({ type: DATABASES_GET_RESET });
       setDbName("");
       setVisiblehandler(!visible);
     }
