@@ -24,6 +24,7 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
       fields: { schemaField: "", schemaType: "Number" },
     },
   ]);
+  console.log(rows);
   const column_type_options = {
     Option1_number: "Number",
     Option2_string: "Text",
@@ -83,6 +84,11 @@ const AddDBForm = ({ visible, setVisiblehandler }) => {
 
   const createDBHandler = (e) => {
     e.preventDefault();
+    const schemaObject = {};
+    rows.forEach((item) => {
+      schemaObject[item.fields.schemaField] = item.fields.schemaType;
+    });
+    console.log(schemaObject);
     const model = {
       modelName: dbName,
       schemaDefinition: {},
