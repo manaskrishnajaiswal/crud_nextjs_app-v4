@@ -21,12 +21,14 @@ import {
   databsesGetAction,
 } from "@/frontend/redux/actions/databaseActions";
 import { DATABASE_DELETE_RESET } from "@/frontend/redux/constants/databaseConstants";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const [deleteModelName, setDeleteModelName] = useState("");
   const [visible, setVisible] = useState(false);
 
   const dispatch = useDispatch();
+  const router = useRouter();
   const databasesGet = useSelector((state) => state.databasesGet);
   const {
     loading: loadingdatabasesget,
@@ -61,8 +63,8 @@ export default function Home() {
     setVisible(!visible);
   };
 
-  const viewDBhandler = () => {
-    setVisible(!visible);
+  const viewDBhandler = (dbName) => {
+    router.push(`/database/${dbName}`);
   };
 
   const deleteDBhandler = (dbName) => {
@@ -144,7 +146,7 @@ export default function Home() {
                       </div>
                       <div className="p-2">
                         <button
-                          onClick={viewDBhandler}
+                          onClick={() => viewDBhandler(model)}
                           className="my-2 flex bg-yellow-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-yellow-500 hover:text-gray-800"
                         >
                           <span className="px-1">
