@@ -9,6 +9,9 @@ import {
   DATABASE_DELETE_FAIL,
   DATABASE_DELETE_REQUEST,
   DATABASE_DELETE_SUCCESS,
+  DATABASE_GET_FAIL,
+  DATABASE_GET_REQUEST,
+  DATABASE_GET_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -71,8 +74,39 @@ export const databsesGetAction = () => async (dispatch) => {
   }
 };
 
+// GET /api/modelApi/modelsReq -> get list of availble models in database
+export const databseGetAction = (dbName) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DATABASE_GET_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.get(
+      `/api/modelApi/modelsReq/${dbName}`,
+      config
+    );
+    dispatch({
+      type: DATABASE_GET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    // console.log(error);
+    dispatch({
+      type: DATABASE_GET_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
 // DEL /api/modelApi/modelsReq/[modeName] -> delete a model from a database
-export const databaseDeleteAction = (deleteName) => async (dispatch) => {
+export const databaseDeleteAction = (dbName) => async (dispatch) => {
   try {
     dispatch({
       type: DATABASE_DELETE_REQUEST,
@@ -83,7 +117,7 @@ export const databaseDeleteAction = (deleteName) => async (dispatch) => {
       },
     };
     const { data } = await axios.delete(
-      `/api/modelApi/modelsReq/${deleteName}`,
+      `/api/modelApi/modelsReq/${dbName}`,
       config
     );
     dispatch({

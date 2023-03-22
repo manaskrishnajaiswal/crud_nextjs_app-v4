@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import {
   databaseDeleteAction,
+  databseGetAction,
   databsesGetAction,
 } from "@/frontend/redux/actions/databaseActions";
 import { DATABASE_DELETE_RESET } from "@/frontend/redux/constants/databaseConstants";
@@ -55,6 +56,7 @@ export default function Home() {
   };
 
   const viewDBhandler = (dbName) => {
+    dispatch(databseGetAction(dbName));
     router.push(`/database/${dbName}`);
   };
 
