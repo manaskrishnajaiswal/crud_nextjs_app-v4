@@ -1,5 +1,8 @@
 import connectMongo from "@/backend/config/database/conn";
-import { createDBData } from "@/backend/controllers/modelsDataController";
+import {
+  createDBData,
+  getDBData,
+} from "@/backend/controllers/modelsDataController";
 
 export default async function handler(req, res) {
   connectMongo().catch(() =>
@@ -9,7 +12,7 @@ export default async function handler(req, res) {
   const { method } = req;
   switch (method) {
     case "GET":
-      // GET /api/modelApi/modelsData/[modeName] -> find a model in a database
+      // GET /api/modelApi/modelsData/[modeName] -> get all data from db
       await getDBData(req, res);
       break;
     case "POST":
