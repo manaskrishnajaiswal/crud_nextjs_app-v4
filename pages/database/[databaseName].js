@@ -19,8 +19,14 @@ import Link from "next/link";
 import ColumnNameType from "@/frontend/components/ColumnNameType";
 import ColumnData from "@/frontend/components/ColumnData";
 import OutputForm from "@/frontend/components/OutputForm";
-import { databseGetAction } from "@/frontend/redux/actions/databaseActions";
-import { DATABASE_GET_RESET } from "@/frontend/redux/constants/databaseConstants";
+import {
+  databseGetAction,
+  dbAllDataGetAction,
+} from "@/frontend/redux/actions/databaseActions";
+import {
+  DATABASE_GET_RESET,
+  DB_ALL_DATA_GET_RESET,
+} from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 
 const EmpInfo = () => {
@@ -45,9 +51,18 @@ const EmpInfo = () => {
     error: errordatabaseget,
     databaseget,
   } = databaseGet;
+  const dbAllDataGet = useSelector((state) => state.dbAllDataGet);
+  const {
+    loading: loadingdballdataget,
+    error: errordballdataget,
+    dballdataget,
+  } = dbAllDataGet;
   useEffect(() => {
     if (!databaseget && dbName && !allowEmployeeGet) {
       dispatch(databseGetAction(dbName));
+    }
+    if (!dballdataget && dbName && !allowEmployeeGet) {
+      dispatch(dbAllDataGetAction(dbName));
     }
     if (databaseget) {
       const tempSchema = {};
@@ -69,7 +84,7 @@ const EmpInfo = () => {
       setDbSchema(tempSchema);
       setSchemaFromFile(tempSchemaFromFile);
     }
-  }, [dispatch, databaseget, dbName, allowEmployeeGet]);
+  }, [dispatch, databaseget, dbName, allowEmployeeGet, dballdataget]);
   console.log(dbSchema);
 
   const updateEmployeehandler = () => {
@@ -90,6 +105,7 @@ const EmpInfo = () => {
     dbName = "";
     setEmployeeGet(true);
     dispatch({ type: DATABASE_GET_RESET });
+    dispatch({ type: DB_ALL_DATA_GET_RESET });
   };
 
   return (

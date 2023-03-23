@@ -15,6 +15,14 @@ import {
   DATABASE_GET_REQUEST,
   DATABASE_GET_RESET,
   DATABASE_GET_SUCCESS,
+  DB_ALL_DATA_GET_FAIL,
+  DB_ALL_DATA_GET_REQUEST,
+  DB_ALL_DATA_GET_RESET,
+  DB_ALL_DATA_GET_SUCCESS,
+  DB_DATA_CREATE_FAIL,
+  DB_DATA_CREATE_REQUEST,
+  DB_DATA_CREATE_RESET,
+  DB_DATA_CREATE_SUCCESS,
 } from "../constants/databaseConstants";
 
 export const databaseCreateReducer = (state = {}, action) => {
@@ -71,6 +79,36 @@ export const databaseDeleteReducer = (state = {}, action) => {
     case DATABASE_DELETE_FAIL:
       return { loading: false, success: false, error: action.payload };
     case DATABASE_DELETE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const dbDataCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DB_DATA_CREATE_REQUEST:
+      return { loading: true };
+    case DB_DATA_CREATE_SUCCESS:
+      return { loading: false, success: true, dbdatacreate: action.payload };
+    case DB_DATA_CREATE_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    case DB_DATA_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const dbAllDataGetReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DB_ALL_DATA_GET_REQUEST:
+      return { loading: true };
+    case DB_ALL_DATA_GET_SUCCESS:
+      return { loading: false, success: true, dballdataget: action.payload };
+    case DB_ALL_DATA_GET_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    case DB_ALL_DATA_GET_RESET:
       return {};
     default:
       return state;

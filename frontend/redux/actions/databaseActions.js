@@ -12,6 +12,9 @@ import {
   DATABASE_GET_FAIL,
   DATABASE_GET_REQUEST,
   DATABASE_GET_SUCCESS,
+  DB_ALL_DATA_GET_FAIL,
+  DB_ALL_DATA_GET_REQUEST,
+  DB_ALL_DATA_GET_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -128,6 +131,37 @@ export const databaseDeleteAction = (dbName) => async (dispatch) => {
     // console.log(error);
     dispatch({
       type: DATABASE_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+// GET /api/modelsData/modelsReq -> get all data from db
+export const dbAllDataGetAction = (dbName) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DB_ALL_DATA_GET_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.get(
+      `/api/modelApi/modelsData/${dbName}`,
+      config
+    );
+    dispatch({
+      type: DB_ALL_DATA_GET_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    // console.log(error);
+    dispatch({
+      type: DB_ALL_DATA_GET_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
