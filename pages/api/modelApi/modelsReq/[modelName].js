@@ -1,5 +1,6 @@
 import connectMongo from "@/backend/config/database/conn";
 import {
+  createDBData,
   deleteModel,
   getModel,
 } from "@/backend/controllers/modelsReqController";
@@ -15,10 +16,10 @@ export default async function handler(req, res) {
       // GET /api/modelApi/modelsReq/[modeName] -> find a model in a database
       await getModel(req, res);
       break;
-    // case "PUT":
-    //   // PUT /api/employee/EmpId -> update data of a employee
-    //   await putEmployeeData(req, res);
-    //   break;
+    case "POST":
+      // POST /api/modelApi/modelsReq/[modeName] -> create data of a DB
+      await createDBData(req, res);
+      break;
     case "DELETE":
       // DEL /api/modelApi/modelsReq/[modeName] -> delete a model from a database
       await deleteModel(req, res);

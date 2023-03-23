@@ -15,7 +15,6 @@ const getSchemaForModel = async (data) => {
       throw new Error(`Unsupported type ${value} for field ${key}`);
     }
   }
-  console.log(schemaFields);
   return new Schema(schemaFields);
 };
 

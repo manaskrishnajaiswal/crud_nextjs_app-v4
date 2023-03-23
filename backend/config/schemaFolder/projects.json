@@ -1,5 +1,6 @@
 {
   "name": "Text",
   "description": "Textarea",
-  "status": "Text"
+  "date": "Date",
+  "length": "Number"
 }

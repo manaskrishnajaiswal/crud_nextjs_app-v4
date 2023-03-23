@@ -21,6 +21,7 @@ import ColumnData from "@/frontend/components/ColumnData";
 import OutputForm from "@/frontend/components/OutputForm";
 import { databseGetAction } from "@/frontend/redux/actions/databaseActions";
 import { DATABASE_GET_RESET } from "@/frontend/redux/constants/databaseConstants";
+import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 
 const EmpInfo = () => {
   const router = useRouter();
@@ -155,31 +156,9 @@ const EmpInfo = () => {
             <></>
           )}
           {/* collapsable form */}
-          {visibleAddNewEmpData ? (
+          {visibleAddNewEmpData && dbSchema && dbName ? (
             <div className="container mx-auto py-5 border-b">
-              <ColumnNameType
-                columnName={columnName}
-                setColumnName={setColumnName}
-                setColumnType={setColumnType}
-              />
-              <ColumnData
-                columnData={columnData}
-                setColumnData={setColumnData}
-                columnName={columnName}
-                setColumnName={setColumnName}
-                columnType={columnType}
-                outputForm={outputForm}
-                setOutputForm={setOutputForm}
-              />
-              {outputForm.length !== 0 && (
-                <OutputForm
-                  EmpId={EmpId}
-                  outputForm={outputForm}
-                  setOutputForm={setOutputForm}
-                  visibleAddNewEmpData={visibleAddNewEmpData}
-                  setVisibleAddNewEmpData={setVisibleAddNewEmpData}
-                />
-              )}
+              <AddDBDataForm dbName={dbName} dbSchema={dbSchema} />
             </div>
           ) : (
             <></>
