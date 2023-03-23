@@ -61,7 +61,9 @@ export async function getModel(req, res) {
     // Get a list of available models in the database
     const modelNames = await getModelNames();
     if (modelNames.includes(modelName)) {
-      const schema = mongoose.model(modelName).schema;
+      const MyModelFetch = mongoose.models[modelName];
+      console.log(MyModelFetch);
+      const schema = MyModelFetch.schema;
       res.status(200).json({
         message: `Model: ${modelName} found in database!`,
         model: modelName,

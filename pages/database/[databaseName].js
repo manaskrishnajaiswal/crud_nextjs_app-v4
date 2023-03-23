@@ -49,11 +49,14 @@ const EmpInfo = () => {
     }
     if (databaseget) {
       const tempSchema = {};
-      Object.keys(databaseget.schema.paths).forEach(
-        (key) => (tempSchema[key] = databaseget.schema.paths[key].instance)
-      );
-      delete tempSchema.__v;
-      delete tempSchema._id;
+      const schemaPaths = databaseget.schema || "";
+      if (schemaPaths) {
+        Object.keys(databaseget.schema.paths).forEach(
+          (key) => (tempSchema[key] = databaseget.schema.paths[key].instance)
+        );
+        delete tempSchema.__v;
+        delete tempSchema._id;
+      }
       setDbSchema(tempSchema);
     }
   }, [dispatch, databaseget, dbName, allowEmployeeGet]);
