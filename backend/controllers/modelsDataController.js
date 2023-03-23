@@ -17,7 +17,6 @@ const schemaFolderPath = path.join(
 // POST /api/modelsData/modelsReq/[modeName] -> create data of a DB
 export async function createDBData(req, res) {
   const { modelName } = req.query;
-  console.log(req.body);
   const modelData = req.body;
   Object.keys(modelData).forEach((key) => {
     if (moment(modelData[key], "YYYY-MM-DD", true).isValid()) {

@@ -18,6 +18,9 @@ import {
   DB_DATA_CREATE_FAIL,
   DB_DATA_CREATE_REQUEST,
   DB_DATA_CREATE_SUCCESS,
+  DB_DATA_DELETE_FAIL,
+  DB_DATA_DELETE_REQUEST,
+  DB_DATA_DELETE_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -206,3 +209,35 @@ export const dbDataCreateAction =
       });
     }
   };
+
+// DEL /api/modelApi/modelsData/[modeName] -> delete a model data from a database
+export const dbDataDelAction = (modelName, modelDataId) => async (dispatch) => {
+  try {
+    dispatch({
+      type: DB_DATA_DELETE_REQUEST,
+    });
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    const { data } = await axios.delete(
+      `/api/modelApi/modelsData/${modelName}`,
+      { data: modelDataId },
+      config
+    );
+    dispatch({
+      type: DB_DATA_DELETE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    // console.log(error);
+    dispatch({
+      type: DB_DATA_DELETE_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};

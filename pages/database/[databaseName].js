@@ -23,11 +23,13 @@ import OutputForm from "@/frontend/components/OutputForm";
 import {
   databseGetAction,
   dbAllDataGetAction,
+  dbDataDelAction,
 } from "@/frontend/redux/actions/databaseActions";
 import {
   DATABASE_GET_RESET,
   DB_ALL_DATA_GET_RESET,
   DB_DATA_CREATE_RESET,
+  DB_DATA_DELETE_RESET,
 } from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 
@@ -66,6 +68,13 @@ const EmpInfo = () => {
     error: errordbdatacreate,
     dbdatacreate,
   } = dbDataCreate;
+  const dbDataDel = useSelector((state) => state.dbDataDel);
+  const {
+    loading: loadingdbdatadelete,
+    success: successdbdatadelete,
+    error: errordbdatadelete,
+    dbdatadelete,
+  } = dbDataDel;
   useEffect(() => {
     if (!databaseget && dbName && !allowEmployeeGet) {
       dispatch(databseGetAction(dbName));
@@ -75,6 +84,10 @@ const EmpInfo = () => {
     }
     if (successdbdatacreate) {
       dispatch({ type: DB_DATA_CREATE_RESET });
+      dispatch({ type: DB_ALL_DATA_GET_RESET });
+    }
+    if (successdbdatadelete) {
+      dispatch({ type: DB_DATA_DELETE_RESET });
       dispatch({ type: DB_ALL_DATA_GET_RESET });
     }
     if (databaseget) {
@@ -104,6 +117,7 @@ const EmpInfo = () => {
     allowEmployeeGet,
     dballdataget,
     successdbdatacreate,
+    successdbdatadelete,
   ]);
   console.log(dbSchema);
 
@@ -119,6 +133,14 @@ const EmpInfo = () => {
       setVisibleAddNewModelData(!visibleAddNewModelData);
     } else {
       toast.error("Update Action in Progress...");
+    }
+  };
+  const deleteDBDatahandler = (dataId) => {
+    const model = {
+      dbDataId: dataId,
+    };
+    if (dataId && dbName) {
+      dispatch(dbDataDelAction(dbName, model));
     }
   };
   const backButtonHandler = () => {
@@ -269,7 +291,7 @@ const EmpInfo = () => {
                           </span>
                         </button>
                         <button
-                          onClick={() => deleteDBhandler(model)}
+                          onClick={() => deleteDBDatahandler(data._id)}
                           className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-red-500 hover:text-gray-800"
                         >
                           <span className="px-1">
