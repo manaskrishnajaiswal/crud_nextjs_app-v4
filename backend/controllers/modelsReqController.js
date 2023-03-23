@@ -91,6 +91,7 @@ export async function getModel(req, res) {
         message: `Model: ${modelName} found in database!`,
         model: modelName,
         schema: schema,
+        schemaFromStoredFile: schemaFromStoredFile,
         found: true,
       });
     } else {

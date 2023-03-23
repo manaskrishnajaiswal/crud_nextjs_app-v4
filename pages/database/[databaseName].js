@@ -37,6 +37,7 @@ const EmpInfo = () => {
   const [outputForm, setOutputForm] = useState([]);
 
   const [dbSchema, setDbSchema] = useState({});
+  const [schemaFromFile, setSchemaFromFile] = useState({});
 
   const databaseGet = useSelector((state) => state.databaseGet);
   const {
@@ -50,7 +51,9 @@ const EmpInfo = () => {
     }
     if (databaseget) {
       const tempSchema = {};
+      const tempSchemaFromFile = {};
       const schemaPaths = databaseget.schema || "";
+      const schemaFromFilePaths = databaseget.schemaFromStoredFile || "";
       if (schemaPaths) {
         Object.keys(databaseget.schema.paths).forEach(
           (key) => (tempSchema[key] = databaseget.schema.paths[key].instance)
@@ -58,7 +61,13 @@ const EmpInfo = () => {
         delete tempSchema.__v;
         delete tempSchema._id;
       }
+      if (schemaFromFilePaths) {
+        Object.keys(schemaFromFilePaths).forEach(
+          (key) => (tempSchemaFromFile[key] = schemaFromFilePaths[key])
+        );
+      }
       setDbSchema(tempSchema);
+      setSchemaFromFile(tempSchemaFromFile);
     }
   }, [dispatch, databaseget, dbName, allowEmployeeGet]);
   console.log(dbSchema);
@@ -158,7 +167,11 @@ const EmpInfo = () => {
           {/* collapsable form */}
           {visibleAddNewEmpData && dbSchema && dbName ? (
             <div className="container mx-auto py-5 border-b">
-              <AddDBDataForm dbName={dbName} dbSchema={dbSchema} />
+              <AddDBDataForm
+                schemaFromFile={schemaFromFile}
+                dbName={dbName}
+                dbSchema={dbSchema}
+              />
             </div>
           ) : (
             <></>
