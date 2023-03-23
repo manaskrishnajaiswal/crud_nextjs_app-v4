@@ -2,6 +2,16 @@ import mongoose from "mongoose";
 import { createDynamicModel, getModelNames } from "../config/lib/dbHelperFunc";
 import connectMongo from "../config/database/conn";
 import getSchemaForModel from "../config/lib/getSchemaForModel";
+import fs from "fs";
+import path from "path";
+const schemaFolderPath = path.join(
+  "D:",
+  "MERN Completed Projects",
+  "crud_nextjs_app-v4",
+  "backend",
+  "config",
+  "schemaFolder"
+);
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
 export async function createModel(req, res) {
@@ -15,6 +25,9 @@ export async function createModel(req, res) {
         found: true,
       });
     }
+    const filePath = path.join(schemaFolderPath, `${modelName}.json`);
+    const schemaJSON = JSON.stringify(schemaDefinition, null, 2);
+    fs.writeFileSync(filePath, schemaJSON);
     const modDBCustomSchema = await getSchemaForModel(schemaDefinition);
     console.log(modDBCustomSchema);
     const Model = await createDynamicModel(modelName, modDBCustomSchema);
@@ -61,8 +74,17 @@ export async function getModel(req, res) {
     // Get a list of available models in the database
     const modelNames = await getModelNames();
     if (modelNames.includes(modelName)) {
-      const MyModelFetch = mongoose.models[modelName];
-      console.log(MyModelFetch);
+      if (mongoose.connection.models[modelName]) {
+        console.log("Model already exists, deleting from cache...");
+        // Clear compiled model from cache
+        delete mongoose.connection.models[modelName];
+        // delete mongoose.connection.modelSchemas[modelName];
+      }
+      const filePath = path.join(schemaFolderPath, `${modelName}.json`);
+      const schemaFromStoredFile = JSON.parse(fs.readFileSync(filePath));
+      console.log(schemaFromStoredFile);
+      const modDBCustomSchema = await getSchemaForModel(schemaFromStoredFile);
+      const MyModelFetch = mongoose.model(modelName, modDBCustomSchema);
       const schema = MyModelFetch.schema;
       res.status(200).json({
         message: `Model: ${modelName} found in database!`,
