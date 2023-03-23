@@ -1,4 +1,5 @@
 import { BiEdit, BiTrashAlt, BiUserCircle, BiArrowBack } from "react-icons/bi";
+import { BsDatabaseAdd, BsDatabase } from "react-icons/bs";
 import Head from "next/head";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -210,14 +211,58 @@ const EmpInfo = () => {
             </div>
           </div>
           <div className="container mx-auto py-5 border-b">
-            {dbName && (
-              <ViewUserForm
-                dbName={dbName}
-                databaseget={databaseget}
-                visisbleUpEmp={visisbleUpEmp}
-                setVisibleUpEmphandler={setVisibleUpEmp}
-              />
-            )}
+            <div className="py-5 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {dballdataget ? (
+                dballdataget.result.map((data) => (
+                  <div
+                    key={data._id}
+                    className="bg-white p-4 rounded-md shadow-md"
+                  >
+                    <div className="flex justify-between">
+                      <div className="p-2">
+                        <h6 className="text-xl font-bold">Database Name</h6>
+                        <span>{dbName}</span>
+                        <br></br>
+                        <h6 className="text-xl font-bold">Database Data</h6>
+                        <span>
+                          <strong>UID</strong> - {data._id}
+                        </span>
+                        {Object.keys(data).map((key, index) => (
+                          <span key={index}>
+                            {key !== "_id" && key !== "__v" && (
+                              <>
+                                <br></br>
+                                <strong>{key}</strong> - {data[key]}
+                              </>
+                            )}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="p-2">
+                        <button
+                          onClick={() => viewDBhandler(model)}
+                          className="my-2 flex bg-yellow-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-yellow-500 hover:text-gray-800"
+                        >
+                          <span className="px-1">
+                            <BsDatabase size={23}></BsDatabase>
+                          </span>
+                        </button>
+                        <button
+                          onClick={() => deleteDBhandler(model)}
+                          className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-red-500 hover:text-gray-800"
+                        >
+                          <span className="px-1">
+                            <BsDatabase size={23}></BsDatabase>
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </main>
       </section>
