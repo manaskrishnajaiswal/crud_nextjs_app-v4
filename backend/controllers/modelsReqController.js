@@ -83,7 +83,7 @@ export async function getModel(req, res) {
       }
       const filePath = path.join(schemaFolderPath, `${modelName}.json`);
       const schemaFromStoredFile = JSON.parse(fs.readFileSync(filePath));
-      console.log(schemaFromStoredFile);
+      // console.log(schemaFromStoredFile);
       const modDBCustomSchema = await getSchemaForModel(schemaFromStoredFile);
       const MyModelFetch = mongoose.model(modelName, modDBCustomSchema);
       const schema = MyModelFetch.schema;

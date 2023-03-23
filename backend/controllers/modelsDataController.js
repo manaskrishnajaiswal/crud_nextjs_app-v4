@@ -17,6 +17,7 @@ const schemaFolderPath = path.join(
 // POST /api/modelsData/modelsReq/[modeName] -> create data of a DB
 export async function createDBData(req, res) {
   const { modelName } = req.query;
+  console.log(req.body);
   const modelData = req.body;
   Object.keys(modelData).forEach((key) => {
     if (moment(modelData[key], "YYYY-MM-DD", true).isValid()) {
@@ -111,14 +112,14 @@ export async function getDBData(req, res) {
         });
         return obj;
       });
-      if (modifiedresult) {
-        console.log({
-          message: `Model: ${modelName} found in database! and all data fetched successfully`,
-          model: modelName,
-          result: modifiedresult,
-          found: true,
-        });
-      }
+      // if (modifiedresult) {
+      //   console.log({
+      //     message: `Model: ${modelName} found in database! and all data fetched successfully`,
+      //     model: modelName,
+      //     result: modifiedresult,
+      //     found: true,
+      //   });
+      // }
       res.status(200).json({
         message: `Model: ${modelName} found in database! and all data fetched successfully`,
         model: modelName,

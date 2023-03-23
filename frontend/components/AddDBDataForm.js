@@ -2,10 +2,11 @@ import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
 import { employeeCreateAction } from "../redux/actions/employeeActions";
+import { dbDataCreateAction } from "../redux/actions/databaseActions";
 
 const AddDBDataForm = ({
-  visible,
-  setVisiblehandler,
+  visibleAddNewModelData,
+  setVisibleAddNewModelData,
   dbSchema,
   schemaFromFile,
   dbName,
@@ -23,14 +24,14 @@ const AddDBDataForm = ({
 
   const addDBDataSubmit = (e) => {
     e.preventDefault();
-    if (dbSchema) {
+    if (formData && dbName) {
       const model = {
         modelName: dbName,
-        modelData: dbSchema,
+        modelData: formData,
       };
-      dispatch(employeeCreateAction(model));
+      dispatch(dbDataCreateAction(model));
     }
-    setVisiblehandler(!visible);
+    setVisibleAddNewModelData(!visibleAddNewModelData);
   };
 
   return (

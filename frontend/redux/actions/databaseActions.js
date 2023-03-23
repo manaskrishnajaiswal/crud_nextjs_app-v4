@@ -15,6 +15,9 @@ import {
   DB_ALL_DATA_GET_FAIL,
   DB_ALL_DATA_GET_REQUEST,
   DB_ALL_DATA_GET_SUCCESS,
+  DB_DATA_CREATE_FAIL,
+  DB_DATA_CREATE_REQUEST,
+  DB_DATA_CREATE_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -169,3 +172,37 @@ export const dbAllDataGetAction = (dbName) => async (dispatch) => {
     });
   }
 };
+
+// POST /api/modelApi/modelsData/[modeName] -> create data of a DB
+export const dbDataCreateAction =
+  ({ modelName, modelData }) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: DB_DATA_CREATE_REQUEST,
+      });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        `/api/modelApi/modelsData/${modelName}`,
+        modelData,
+        config
+      );
+      dispatch({
+        type: DB_DATA_CREATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      // console.log(error);
+      dispatch({
+        type: DB_DATA_CREATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };

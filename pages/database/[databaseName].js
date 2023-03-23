@@ -27,6 +27,7 @@ import {
 import {
   DATABASE_GET_RESET,
   DB_ALL_DATA_GET_RESET,
+  DB_DATA_CREATE_RESET,
 } from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 
@@ -36,8 +37,8 @@ const EmpInfo = () => {
 
   let dbName = router.query.databaseName;
   const [allowEmployeeGet, setEmployeeGet] = useState(false);
-  const [visisbleUpEmp, setVisibleUpEmp] = useState(false);
-  const [visibleAddNewEmpData, setVisibleAddNewEmpData] = useState(false);
+  const [visisbleUpModelData, setVisibleUpModelData] = useState(false);
+  const [visibleAddNewModelData, setVisibleAddNewModelData] = useState(false);
   const [columnName, setColumnName] = useState("");
   const [columnData, setColumnData] = useState("");
   const [columnType, setColumnType] = useState("Number");
@@ -58,12 +59,23 @@ const EmpInfo = () => {
     error: errordballdataget,
     dballdataget,
   } = dbAllDataGet;
+  const dbDataCreate = useSelector((state) => state.dbDataCreate);
+  const {
+    loading: loadingdbdatacreate,
+    success: successdbdatacreate,
+    error: errordbdatacreate,
+    dbdatacreate,
+  } = dbDataCreate;
   useEffect(() => {
     if (!databaseget && dbName && !allowEmployeeGet) {
       dispatch(databseGetAction(dbName));
     }
     if (!dballdataget && dbName && !allowEmployeeGet) {
       dispatch(dbAllDataGetAction(dbName));
+    }
+    if (successdbdatacreate) {
+      dispatch({ type: DB_DATA_CREATE_RESET });
+      dispatch({ type: DB_ALL_DATA_GET_RESET });
     }
     if (databaseget) {
       const tempSchema = {};
@@ -85,19 +97,26 @@ const EmpInfo = () => {
       setDbSchema(tempSchema);
       setSchemaFromFile(tempSchemaFromFile);
     }
-  }, [dispatch, databaseget, dbName, allowEmployeeGet, dballdataget]);
+  }, [
+    dispatch,
+    databaseget,
+    dbName,
+    allowEmployeeGet,
+    dballdataget,
+    successdbdatacreate,
+  ]);
   console.log(dbSchema);
 
-  const updateEmployeehandler = () => {
-    if (!visibleAddNewEmpData) {
-      setVisibleUpEmp(!visisbleUpEmp);
+  const updateModelDatahandler = () => {
+    if (!visibleAddNewModelData) {
+      setVisibleUpModelData(!visisbleUpModelData);
     } else {
-      toast.error("Add New Emp Data in Progress...");
+      toast.error("Add New Project Data in Progress...");
     }
   };
-  const addNewEmployeeDatahandler = () => {
-    if (!visisbleUpEmp) {
-      setVisibleAddNewEmpData(!visibleAddNewEmpData);
+  const addNewModelDatahandler = () => {
+    if (!visisbleUpModelData) {
+      setVisibleAddNewModelData(!visibleAddNewModelData);
     } else {
       toast.error("Update Action in Progress...");
     }
@@ -145,7 +164,7 @@ const EmpInfo = () => {
           <div className="container mx-auto flex justify-between py-5 border-b">
             <div className="left flex gap-3">
               <button
-                onClick={updateEmployeehandler}
+                onClick={updateModelDatahandler}
                 className="flex bg-yellow-400 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
               >
                 Update {dbName} data{" "}
@@ -156,7 +175,7 @@ const EmpInfo = () => {
             </div>
             <div className="right flex gap-3">
               <button
-                onClick={addNewEmployeeDatahandler}
+                onClick={addNewModelDatahandler}
                 className="flex bg-yellow-400 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
               >
                 Add new {dbName} data{" "}
@@ -167,7 +186,7 @@ const EmpInfo = () => {
             </div>
           </div>
           {/* collapsable form */}
-          {visisbleUpEmp ? (
+          {visisbleUpModelData ? (
             <div className="container mx-auto py-5 border-b">
               {dbName && (
                 <UpdateUserForm
@@ -182,12 +201,14 @@ const EmpInfo = () => {
             <></>
           )}
           {/* collapsable form */}
-          {visibleAddNewEmpData && dbSchema && dbName ? (
+          {visibleAddNewModelData && dbSchema && dbName ? (
             <div className="container mx-auto py-5 border-b">
               <AddDBDataForm
                 schemaFromFile={schemaFromFile}
                 dbName={dbName}
                 dbSchema={dbSchema}
+                visibleAddNewModelData={visibleAddNewModelData}
+                setVisibleAddNewModelData={setVisibleAddNewModelData}
               />
             </div>
           ) : (
