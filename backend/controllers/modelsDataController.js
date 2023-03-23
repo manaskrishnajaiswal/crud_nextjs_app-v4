@@ -91,18 +91,38 @@ export async function getDBData(req, res) {
       const modDBCustomSchema = await getSchemaForModel(schemaFromStoredFile);
       const MyModelFetch = mongoose.model(modelName, modDBCustomSchema);
       const result = await MyModelFetch.find({});
-      if (result) {
+      const regex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T00:00:00.000Z$/;
+      const modifiedresult = result.map((doc) => {
+        const obj = doc.toObject();
+        Object.keys(obj).forEach((key) => {
+          if (obj[key] instanceof Date) {
+            const dateString = obj[key].toISOString();
+            // console.log("This is a Date object");
+            if (regex.test(dateString)) {
+              // console.log("String matches the pattern");
+              obj[key] = dateString.slice(0, 10);
+            } else {
+              // console.log("String does not match the pattern");
+            }
+          } else {
+            // console.log("This is not a Date object");
+          }
+          // console.log(`${key}-${obj[key]}`);
+        });
+        return obj;
+      });
+      if (modifiedresult) {
         console.log({
           message: `Model: ${modelName} found in database! and all data fetched successfully`,
           model: modelName,
-          result: result,
+          result: modifiedresult,
           found: true,
         });
       }
       res.status(200).json({
         message: `Model: ${modelName} found in database! and all data fetched successfully`,
         model: modelName,
-        result: result,
+        result: modifiedresult,
         found: true,
       });
     } else {
