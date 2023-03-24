@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { employeeCreateAction } from "../redux/actions/employeeActions";
 import { dbDataCreateAction } from "../redux/actions/databaseActions";
 
 const AddDBDataForm = ({
@@ -13,7 +12,7 @@ const AddDBDataForm = ({
 }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({});
-  console.log(formData);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevState) => ({

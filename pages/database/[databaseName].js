@@ -1,5 +1,6 @@
 import { BiEdit, BiTrashAlt, BiUserCircle, BiArrowBack } from "react-icons/bi";
 import { BsDatabaseAdd, BsDatabase } from "react-icons/bs";
+import { BiX, BiCheck } from "react-icons/bi";
 import Head from "next/head";
 import axios from "axios";
 import { useRouter } from "next/router";
@@ -41,10 +42,7 @@ const EmpInfo = () => {
   const [allowEmployeeGet, setEmployeeGet] = useState(false);
   const [visisbleUpModelData, setVisibleUpModelData] = useState(false);
   const [visibleAddNewModelData, setVisibleAddNewModelData] = useState(false);
-  const [columnName, setColumnName] = useState("");
-  const [columnData, setColumnData] = useState("");
-  const [columnType, setColumnType] = useState("Number");
-  const [outputForm, setOutputForm] = useState([]);
+  const [deleteModelDataId, setDeleteModelDataId] = useState("");
 
   const [dbSchema, setDbSchema] = useState({});
   const [schemaFromFile, setSchemaFromFile] = useState({});
@@ -119,7 +117,6 @@ const EmpInfo = () => {
     successdbdatacreate,
     successdbdatadelete,
   ]);
-  console.log(dbSchema);
 
   const updateModelDatahandler = () => {
     if (!visibleAddNewModelData) {
@@ -136,18 +133,26 @@ const EmpInfo = () => {
     }
   };
   const deleteDBDatahandler = (dataId) => {
-    const model = {
-      dbDataId: dataId,
-    };
-    if (dataId && dbName) {
-      dispatch(dbDataDelAction(dbName, model));
-    }
+    setDeleteModelDataId(dataId);
   };
   const backButtonHandler = () => {
     dbName = "";
     setEmployeeGet(true);
     dispatch({ type: DATABASE_GET_RESET });
     dispatch({ type: DB_ALL_DATA_GET_RESET });
+  };
+  const deletehandler = () => {
+    const model = {
+      dbDataId: deleteModelDataId,
+    };
+    if (deleteModelDataId && dbName) {
+      dispatch(dbDataDelAction(dbName, model));
+      setDeleteModelDataId("");
+    }
+  };
+
+  const cancelhandler = () => {
+    setDeleteModelDataId("");
   };
 
   return (
@@ -263,6 +268,11 @@ const EmpInfo = () => {
                   >
                     <div className="flex justify-between">
                       <div className="p-2">
+                        {deleteModelDataId ? (
+                          DeleteComponent({ deletehandler, cancelhandler })
+                        ) : (
+                          <></>
+                        )}
                         <h6 className="text-xl font-bold">Database Name</h6>
                         <span>{dbName}</span>
                         <br></br>
@@ -312,5 +322,31 @@ const EmpInfo = () => {
     </>
   );
 };
+
+function DeleteComponent({ deletehandler, cancelhandler }) {
+  return (
+    <div className="flex gap-5">
+      <button>Are you sure?</button>
+      <button
+        onClick={deletehandler}
+        className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-rose-500 hover:border-red-500 hover:text-gray-50"
+      >
+        Yes{" "}
+        <span className="px-1">
+          <BiX color="rgb(255 255 255)" size={25} />
+        </span>
+      </button>
+      <button
+        onClick={cancelhandler}
+        className="flex bg-green-500 text-white px-4 py-2 border rounded-md hover:bg-gree-500 hover:border-green-500 hover:text-gray-50"
+      >
+        No{" "}
+        <span className="px-1">
+          <BiCheck color="rgb(255 255 255)" size={25} />
+        </span>
+      </button>
+    </div>
+  );
+}
 
 export default EmpInfo;
