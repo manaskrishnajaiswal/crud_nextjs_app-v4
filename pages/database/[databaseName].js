@@ -22,6 +22,7 @@ import {
   DB_DATA_CREATE_RESET,
   DB_DATA_DELETE_RESET,
   DB_DATA_GET_RESET,
+  DB_DATA_UPDATE_RESET,
 } from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 import UpdateDBDataForm from "@/frontend/components/UpdateDBDataForm";
@@ -72,6 +73,13 @@ const EmpInfo = () => {
     error: errordbdatadelete,
     dbdatadelete,
   } = dbDataDel;
+  const dbDataUpdate = useSelector((state) => state.dbDataUpdate);
+  const {
+    loading: loadingdbdataupdate,
+    success: successdbdataupdate,
+    error: errordbdataupdate,
+    dbdataupdate,
+  } = dbDataUpdate;
   useEffect(() => {
     if (!databaseget && dbName && !allowEmployeeGet) {
       dispatch(databseGetAction(dbName));
@@ -85,6 +93,10 @@ const EmpInfo = () => {
     }
     if (successdbdatadelete) {
       dispatch({ type: DB_DATA_DELETE_RESET });
+      dispatch({ type: DB_ALL_DATA_GET_RESET });
+    }
+    if (successdbdataupdate) {
+      dispatch({ type: DB_DATA_UPDATE_RESET });
       dispatch({ type: DB_ALL_DATA_GET_RESET });
     }
     if (databaseget) {
@@ -115,6 +127,7 @@ const EmpInfo = () => {
     dballdataget,
     successdbdatacreate,
     successdbdatadelete,
+    successdbdataupdate,
   ]);
 
   const viewUpdateDBDatahandler = (dataId) => {
