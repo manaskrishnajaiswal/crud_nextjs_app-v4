@@ -21,6 +21,7 @@ import {
   DB_ALL_DATA_GET_RESET,
   DB_DATA_CREATE_RESET,
   DB_DATA_DELETE_RESET,
+  DB_DATA_GET_RESET,
 } from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
 import UpdateDBDataForm from "@/frontend/components/UpdateDBDataForm";
@@ -51,6 +52,12 @@ const EmpInfo = () => {
     error: errordballdataget,
     dballdataget,
   } = dbAllDataGet;
+  const dbDataGet = useSelector((state) => state.dbDataGet);
+  const {
+    loading: loadingdbdataget,
+    error: errordbdataget,
+    dbdataget,
+  } = dbDataGet;
   const dbDataCreate = useSelector((state) => state.dbDataCreate);
   const {
     loading: loadingdbdatacreate,
@@ -111,13 +118,14 @@ const EmpInfo = () => {
   ]);
 
   const viewUpdateDBDatahandler = (dataId) => {
-    if (dbName && dataId) {
-      dispatch(dbDataGetAction(dbName, dataId));
-    }
     if (updateModelDataId) {
       setUpdateModelDataId("");
+      dispatch({ type: DB_DATA_GET_RESET });
     } else {
       setUpdateModelDataId(dataId);
+    }
+    if (dbName && dataId && !updateModelDataId) {
+      dispatch(dbDataGetAction(dbName, dataId));
     }
     if (!visibleAddNewModelData) {
       setVisibleUpModelData(!visisbleUpModelData);
@@ -203,13 +211,18 @@ const EmpInfo = () => {
             </div>
           </div>
           {/* collapsable form */}
-          {visisbleUpModelData && updateModelDataId && dbSchema && dbName ? (
+          {dbdataget &&
+          visisbleUpModelData &&
+          updateModelDataId &&
+          dbSchema &&
+          dbName ? (
             <div className="container mx-auto py-5 border-b">
               <h1 className="text-xl md:text-3xl text-center font-bold">
                 Data Update Form
               </h1>
               <br></br>
               <UpdateDBDataForm
+                dbData={dbdataget.result}
                 schemaFromFile={schemaFromFile}
                 dbName={dbName}
                 dbSchema={dbSchema}

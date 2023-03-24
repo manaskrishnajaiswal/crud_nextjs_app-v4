@@ -9,9 +9,10 @@ const UpdateDBDataForm = ({
   dbSchema,
   schemaFromFile,
   dbName,
+  dbData,
 }) => {
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState(dbData);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
