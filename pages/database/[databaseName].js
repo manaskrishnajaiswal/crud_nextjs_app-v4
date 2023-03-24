@@ -1,32 +1,15 @@
-import { BiEdit, BiTrashAlt, BiUserCircle, BiArrowBack } from "react-icons/bi";
+import { BiEdit, BiArrowBack } from "react-icons/bi";
 import { AiOutlineEdit } from "react-icons/ai";
-import {
-  BsDatabaseAdd,
-  BsDatabase,
-  BsDatabaseDash,
-  BsDatabaseFillAdd,
-} from "react-icons/bs";
+import { BsDatabaseDash } from "react-icons/bs";
 import { BiX, BiCheck } from "react-icons/bi";
 import Head from "next/head";
-import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { emplpoyeeGetAction } from "@/frontend/redux/actions/employeeActions";
 import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import UpdateUserForm from "@/frontend/components/UpdateUserForm";
-import {
-  EMPLOYEES_GET_RESET,
-  EMPLOYEE_GET_RESET,
-  EMPLOYEE_UPDATE_RESET,
-} from "@/frontend/redux/constants/employeeConstants";
-import ViewUserForm from "@/frontend/components/ViewUserForm";
 import Link from "next/link";
-import ColumnNameType from "@/frontend/components/ColumnNameType";
-import ColumnData from "@/frontend/components/ColumnData";
-import OutputForm from "@/frontend/components/OutputForm";
 import {
   databseGetAction,
   dbAllDataGetAction,
@@ -142,13 +125,6 @@ const EmpInfo = () => {
     }
   };
 
-  const updateModelDatahandler = () => {
-    if (!visibleAddNewModelData) {
-      setVisibleUpModelData(!visisbleUpModelData);
-    } else {
-      toast.error("Add New Project Data in Progress...");
-    }
-  };
   const addNewModelDatahandler = () => {
     if (!visisbleUpModelData) {
       setVisibleAddNewModelData(!visibleAddNewModelData);
@@ -213,17 +189,6 @@ const EmpInfo = () => {
             </h1>
           </div>
           <div className="container mx-auto flex justify-between py-5 border-b">
-            {/* <div className="left flex gap-3">
-              <button
-                onClick={updateModelDatahandler}
-                className="flex bg-yellow-400 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
-              >
-                Update {dbName} data{" "}
-                <span className="px-1">
-                  <BiEdit size={23}></BiEdit>
-                </span>
-              </button>
-            </div> */}
             <div className="right flex gap-3">
               <button
                 onClick={addNewModelDatahandler}
