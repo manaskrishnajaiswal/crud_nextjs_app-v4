@@ -24,6 +24,9 @@ import {
   DB_DATA_GET_FAIL,
   DB_DATA_GET_REQUEST,
   DB_DATA_GET_SUCCESS,
+  DB_DATA_UPDATE_FAIL,
+  DB_DATA_UPDATE_REQUEST,
+  DB_DATA_UPDATE_SUCCESS,
 } from "../constants/databaseConstants";
 
 // POST /api/modelApi/modelsReq -> create a model in the databse
@@ -209,6 +212,40 @@ export const dbDataGetAction = (dbName, modelDataId) => async (dispatch) => {
     });
   }
 };
+
+// GET /api/modelApi/modelsData/[modeName]/[modelData] -> update individual model data from db
+export const dbDataUpdateAction =
+  ({ modelName, modelDataId, modelData }) =>
+  async (dispatch) => {
+    try {
+      dispatch({
+        type: DB_DATA_UPDATE_REQUEST,
+      });
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `/api/modelApi/modelsData/${modelName}/${modelDataId}`,
+        modelData,
+        config
+      );
+      dispatch({
+        type: DB_DATA_UPDATE_SUCCESS,
+        payload: data,
+      });
+    } catch (error) {
+      // console.log(error);
+      dispatch({
+        type: DB_DATA_UPDATE_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 // POST /api/modelApi/modelsData/[modeName] -> create data of a DB
 export const dbDataCreateAction =

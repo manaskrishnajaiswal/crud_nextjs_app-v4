@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { BiPlus } from "react-icons/bi";
 import { useDispatch } from "react-redux";
-import { dbDataCreateAction } from "../redux/actions/databaseActions";
+import {
+  dbDataCreateAction,
+  dbDataUpdateAction,
+} from "../redux/actions/databaseActions";
 
 const UpdateDBDataForm = ({
-  visibleAddNewModelData,
-  setVisibleAddNewModelData,
+  visisbleUpModelData,
+  setVisibleUpModelData,
   dbSchema,
   schemaFromFile,
   dbName,
   dbData,
+  updateModelDataId,
 }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState(dbData);
@@ -22,22 +26,23 @@ const UpdateDBDataForm = ({
     }));
   };
 
-  const addDBDataSubmit = (e) => {
+  const updateDBDataSubmit = (e) => {
     e.preventDefault();
     if (formData && dbName) {
       const model = {
         modelName: dbName,
+        modelDataId: updateModelDataId,
         modelData: formData,
       };
-      dispatch(dbDataCreateAction(model));
+      dispatch(dbDataUpdateAction(model));
     }
-    setVisibleAddNewModelData(!visibleAddNewModelData);
+    setVisibleUpModelData(!visisbleUpModelData);
   };
 
   return (
     <form
       className="grid lg:grid-cols-2 w-4/6 gap-4"
-      onSubmit={addDBDataSubmit}
+      onSubmit={updateDBDataSubmit}
     >
       {Object.keys(dbSchema).map((key, index) => (
         <div key={index} className="input-type">

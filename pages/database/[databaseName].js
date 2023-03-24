@@ -222,12 +222,13 @@ const EmpInfo = () => {
               </h1>
               <br></br>
               <UpdateDBDataForm
+                updateModelDataId={updateModelDataId}
                 dbData={dbdataget.result}
                 schemaFromFile={schemaFromFile}
                 dbName={dbName}
                 dbSchema={dbSchema}
-                visibleAddNewModelData={visibleAddNewModelData}
-                setVisibleAddNewModelData={setVisibleAddNewModelData}
+                visisbleUpModelData={visisbleUpModelData}
+                setVisibleUpModelData={setVisibleUpModelData}
               />
             </div>
           ) : (
