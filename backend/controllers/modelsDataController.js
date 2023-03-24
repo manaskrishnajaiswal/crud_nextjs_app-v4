@@ -70,7 +70,7 @@ export async function createDBData(req, res) {
 }
 
 // GET /api/modelApi/modelsData/[modeName] -> get all data from db
-export async function getDBData(req, res) {
+export async function getAllDBData(req, res) {
   const { modelName } = req.query;
   try {
     if (!modelName)
@@ -123,6 +123,65 @@ export async function getDBData(req, res) {
         message: `Model: ${modelName} found in database! and all data fetched successfully`,
         model: modelName,
         result: modifiedresult,
+        found: true,
+      });
+    } else {
+      res.status(404).json({
+        message: `Model: ${modelName} do not found!`,
+        model: modelName,
+        found: false,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: `Failed to fetch models`, error: error });
+  }
+}
+
+// GET /api/modelApi/modelsData/[modeName]/[modelData] -> get individual model data from db
+export async function getDBData(req, res) {
+  const { modelName, modelDataId } = req.query;
+  console.log(req.query);
+  try {
+    if (!modelName)
+      return res
+        .status(400)
+        .json({ message: "Model name does not send through request!" });
+    // Get a list of available models in the database
+    const modelNames = await getModelNames();
+    if (modelNames.includes(modelName)) {
+      if (mongoose.connection.models[modelName]) {
+        console.log("Model already exists, deleting from cache...");
+        // Clear compiled model from cache
+        delete mongoose.connection.models[modelName];
+        // delete mongoose.connection.modelSchemas[modelName];
+      }
+      const filePath = path.join(schemaFolderPath, `${modelName}.json`);
+      const schemaFromStoredFile = JSON.parse(fs.readFileSync(filePath));
+      const modDBCustomSchema = await getSchemaForModel(schemaFromStoredFile);
+      const MyModelFetch = mongoose.model(modelName, modDBCustomSchema);
+      const result = await MyModelFetch.findById(modelDataId);
+      const regex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T00:00:00.000Z$/;
+      const objResult = result.toObject();
+      Object.keys(objResult).forEach((key) => {
+        if (objResult[key] instanceof Date) {
+          const dateString = objResult[key].toISOString();
+          // console.log("This is a Date object");
+          if (regex.test(dateString)) {
+            // console.log("String matches the pattern");
+            objResult[key] = dateString.slice(0, 10);
+          } else {
+            // console.log("String does not match the pattern");
+          }
+        } else {
+          // console.log("This is not a Date object");
+        }
+        // console.log(`${key}-${obj[key]}`);
+      });
+      res.status(200).json({
+        message: `Model: ${modelName} found in database! and data fetched successfully`,
+        model: modelName,
+        result: objResult,
         found: true,
       });
     } else {

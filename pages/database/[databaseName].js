@@ -127,6 +127,9 @@ const EmpInfo = () => {
   ]);
 
   const viewUpdateDBDatahandler = (dataId) => {
+    // if (dbName && dataId) {
+    //   dispatch(dbAllDataGetAction(dbName, dataId));
+    // }
     if (updateModelDataId) {
       setUpdateModelDataId("");
     } else {

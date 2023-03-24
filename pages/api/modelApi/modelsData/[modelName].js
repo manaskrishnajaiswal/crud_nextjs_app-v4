@@ -2,7 +2,7 @@ import connectMongo from "@/backend/config/database/conn";
 import {
   createDBData,
   deleteDBData,
-  getDBData,
+  getAllDBData,
 } from "@/backend/controllers/modelsDataController";
 
 export default async function handler(req, res) {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   switch (method) {
     case "GET":
       // GET /api/modelApi/modelsData/[modeName] -> get all data from db
-      await getDBData(req, res);
+      await getAllDBData(req, res);
       break;
     case "POST":
       // POST /api/modelApi/modelsData/[modeName] -> create data of a DB
