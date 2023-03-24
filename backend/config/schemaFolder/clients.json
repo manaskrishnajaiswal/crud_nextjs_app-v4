@@ -1,6 +1,10 @@
 {
-  "name": "Text",
-  "age": "Number",
-  "address": "Number",
-  "dob": "Date"
+  "clientname": "Text",
+  "industry": "Text",
+  "location": "Text",
+  "contactperson": "Text",
+  "email": "Text",
+  "phone": "Text",
+  "description": "Textarea",
+  "meetingdate": "Date"
 }

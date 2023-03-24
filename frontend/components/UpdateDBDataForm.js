@@ -62,7 +62,7 @@ const UpdateDBDataForm = ({
             <>
               <textarea
                 style={{ resize: "none" }}
-                rows={3}
+                rows={5}
                 value={formData[key] || ""}
                 onChange={handleInputChange}
                 name={key}
