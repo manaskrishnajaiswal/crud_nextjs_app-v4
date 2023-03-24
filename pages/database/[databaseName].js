@@ -96,6 +96,7 @@ const EmpInfo = () => {
       dispatch({ type: DB_ALL_DATA_GET_RESET });
     }
     if (successdbdataupdate) {
+      setUpdateModelDataId("");
       dispatch({ type: DB_DATA_UPDATE_RESET });
       dispatch({ type: DB_DATA_GET_RESET });
       dispatch({ type: DB_ALL_DATA_GET_RESET });
@@ -134,9 +135,12 @@ const EmpInfo = () => {
   const viewUpdateDBDatahandler = (dataId) => {
     if (!updateModelDataId) {
       setUpdateModelDataId(dataId);
+    } else {
+      setUpdateModelDataId("");
     }
     if (dbName && dataId && updateModelDataId) {
-      console.log("here");
+      dispatch({ type: DB_DATA_GET_RESET });
+    } else {
       dispatch(dbDataGetAction(dbName, dataId));
     }
     if (!visibleAddNewModelData || !updateModelDataId) {
@@ -175,13 +179,13 @@ const EmpInfo = () => {
   const cancelhandler = () => {
     setDeleteModelDataId("");
   };
-  console.log(
-    dbdataget,
-    visisbleUpModelData,
-    updateModelDataId,
-    dbSchema,
-    dbName
-  );
+  // console.log(
+  //   dbdataget,
+  //   visisbleUpModelData,
+  //   updateModelDataId,
+  //   dbSchema,
+  //   dbName
+  // );
   return (
     <>
       <section>
