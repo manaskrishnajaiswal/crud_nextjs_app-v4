@@ -14,6 +14,7 @@ import {
   databseGetAction,
   dbAllDataGetAction,
   dbDataDelAction,
+  dbDataGetAction,
 } from "@/frontend/redux/actions/databaseActions";
 import {
   DATABASE_GET_RESET,
@@ -110,9 +111,9 @@ const EmpInfo = () => {
   ]);
 
   const viewUpdateDBDatahandler = (dataId) => {
-    // if (dbName && dataId) {
-    //   dispatch(dbAllDataGetAction(dbName, dataId));
-    // }
+    if (dbName && dataId) {
+      dispatch(dbDataGetAction(dbName, dataId));
+    }
     if (updateModelDataId) {
       setUpdateModelDataId("");
     } else {

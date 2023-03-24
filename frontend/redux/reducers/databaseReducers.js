@@ -27,6 +27,10 @@ import {
   DB_DATA_DELETE_REQUEST,
   DB_DATA_DELETE_RESET,
   DB_DATA_DELETE_SUCCESS,
+  DB_DATA_GET_FAIL,
+  DB_DATA_GET_REQUEST,
+  DB_DATA_GET_RESET,
+  DB_DATA_GET_SUCCESS,
 } from "../constants/databaseConstants";
 
 export const databaseCreateReducer = (state = {}, action) => {
@@ -113,6 +117,21 @@ export const dbAllDataGetReducer = (state = {}, action) => {
     case DB_ALL_DATA_GET_FAIL:
       return { loading: false, success: false, error: action.payload };
     case DB_ALL_DATA_GET_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const dbDataGetReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DB_DATA_GET_REQUEST:
+      return { loading: true };
+    case DB_DATA_GET_SUCCESS:
+      return { loading: false, success: true, dbdataget: action.payload };
+    case DB_DATA_GET_FAIL:
+      return { loading: false, success: false, error: action.payload };
+    case DB_DATA_GET_RESET:
       return {};
     default:
       return state;

@@ -18,6 +18,7 @@ import {
   dbAllDataGetReducer,
   dbDataCreateReducer,
   dbDataDelReducer,
+  dbDataGetReducer,
 } from "../reducers/databaseReducers";
 
 const bindMiddlware = (middleware) => {
@@ -41,6 +42,7 @@ const reducers = combineReducers({
   dbDataCreate: dbDataCreateReducer,
   dbAllDataGet: dbAllDataGetReducer,
   dbDataDel: dbDataDelReducer,
+  dbDataGet: dbDataGetReducer,
 });
 
 export const store = createStore(reducers, bindMiddlware([thunkMiddleware]));
