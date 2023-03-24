@@ -42,6 +42,9 @@ const AddDBDataForm = ({
         <div key={index} className="input-type">
           {(dbSchema[key] !== "String" || schemaFromFile[key] === "Text") && (
             <>
+              <label>
+                <strong>{key}</strong>
+              </label>
               <input
                 type={dbSchema[key] === "String" ? "text" : dbSchema[key]}
                 value={formData[key] || ""}
@@ -49,11 +52,16 @@ const AddDBDataForm = ({
                 name={key}
                 className="border w-full px-5 py-3 focus:outline-none rounded-md"
                 placeholder={key}
+                required
               />
             </>
           )}
           {dbSchema[key] === "String" && schemaFromFile[key] === "Textarea" && (
             <>
+              <label>
+                <strong>{key}</strong>
+              </label>
+              <br></br>
               <textarea
                 style={{ resize: "none" }}
                 rows={3}
@@ -62,11 +70,13 @@ const AddDBDataForm = ({
                 name={key}
                 className="border w-full px-5 py-3 focus:outline-none rounded-md"
                 placeholder={key}
+                required
               />
             </>
           )}
         </div>
       ))}
+      <br></br>
       <button
         type="submit"
         className="max-h-10 flex justify-center text-md w-2/6 bg-green-500 text-white px-4 py-2 border rounded-md hover:bg-gray-50 hover:border-green-500 hover:text-green-500"

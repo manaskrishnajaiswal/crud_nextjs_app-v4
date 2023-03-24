@@ -1,3 +1,6 @@
 {
-  "name": "Textarea"
+  "name": "Text",
+  "age": "Number",
+  "address": "Number",
+  "dob": "Date"
 }

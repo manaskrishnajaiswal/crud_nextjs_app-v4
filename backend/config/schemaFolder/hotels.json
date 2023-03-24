@@ -1,4 +1,9 @@
 {
-  "age": "Number",
-  "date": "Date"
+  "name": "Text",
+  "address": "Textarea",
+  "priceperroom": "Number",
+  "checkindate": "Date",
+  "checkoutdate": "Date",
+  "customername": "Text",
+  "customermobilenumber": "Text"
 }

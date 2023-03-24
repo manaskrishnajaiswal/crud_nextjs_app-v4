@@ -1,6 +1,7 @@
 {
-  "name": "Text",
+  "projectname": "Text",
+  "startdate": "Date",
+  "budget": "Number",
   "description": "Textarea",
-  "date": "Date",
-  "length": "Number"
+  "notes": "Textarea"
 }

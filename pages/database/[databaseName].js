@@ -97,6 +97,7 @@ const EmpInfo = () => {
     }
     if (successdbdataupdate) {
       dispatch({ type: DB_DATA_UPDATE_RESET });
+      dispatch({ type: DB_DATA_GET_RESET });
       dispatch({ type: DB_ALL_DATA_GET_RESET });
     }
     if (databaseget) {
@@ -131,16 +132,14 @@ const EmpInfo = () => {
   ]);
 
   const viewUpdateDBDatahandler = (dataId) => {
-    if (updateModelDataId) {
-      setUpdateModelDataId("");
-      dispatch({ type: DB_DATA_GET_RESET });
-    } else {
+    if (!updateModelDataId) {
       setUpdateModelDataId(dataId);
     }
-    if (dbName && dataId && !updateModelDataId) {
+    if (dbName && dataId && updateModelDataId) {
+      console.log("here");
       dispatch(dbDataGetAction(dbName, dataId));
     }
-    if (!visibleAddNewModelData) {
+    if (!visibleAddNewModelData || !updateModelDataId) {
       setVisibleUpModelData(!visisbleUpModelData);
     } else {
       toast.error("Add New Project Data in Progress...");
@@ -176,7 +175,13 @@ const EmpInfo = () => {
   const cancelhandler = () => {
     setDeleteModelDataId("");
   };
-
+  console.log(
+    dbdataget,
+    visisbleUpModelData,
+    updateModelDataId,
+    dbSchema,
+    dbName
+  );
   return (
     <>
       <section>
@@ -291,8 +296,8 @@ const EmpInfo = () => {
                     className="bg-white p-4 rounded-md shadow-md"
                   >
                     <div className="flex justify-between">
-                      <div className="p-2">
-                        {deleteModelDataId ? (
+                      <div className="p-2 text-justify">
+                        {deleteModelDataId === data._id ? (
                           DeleteComponent({ deletehandler, cancelhandler })
                         ) : (
                           <></>
