@@ -1,5 +1,11 @@
 import { BiEdit, BiTrashAlt, BiUserCircle, BiArrowBack } from "react-icons/bi";
-import { BsDatabaseAdd, BsDatabase } from "react-icons/bs";
+import { AiOutlineEdit } from "react-icons/ai";
+import {
+  BsDatabaseAdd,
+  BsDatabase,
+  BsDatabaseDash,
+  BsDatabaseFillAdd,
+} from "react-icons/bs";
 import { BiX, BiCheck } from "react-icons/bi";
 import Head from "next/head";
 import axios from "axios";
@@ -33,6 +39,7 @@ import {
   DB_DATA_DELETE_RESET,
 } from "@/frontend/redux/constants/databaseConstants";
 import AddDBDataForm from "@/frontend/components/AddDBDataForm";
+import UpdateDBDataForm from "@/frontend/components/UpdateDBDataForm";
 
 const EmpInfo = () => {
   const router = useRouter();
@@ -43,6 +50,7 @@ const EmpInfo = () => {
   const [visisbleUpModelData, setVisibleUpModelData] = useState(false);
   const [visibleAddNewModelData, setVisibleAddNewModelData] = useState(false);
   const [deleteModelDataId, setDeleteModelDataId] = useState("");
+  const [updateModelDataId, setUpdateModelDataId] = useState("");
 
   const [dbSchema, setDbSchema] = useState({});
   const [schemaFromFile, setSchemaFromFile] = useState({});
@@ -118,6 +126,19 @@ const EmpInfo = () => {
     successdbdatadelete,
   ]);
 
+  const viewUpdateDBDatahandler = (dataId) => {
+    if (updateModelDataId) {
+      setUpdateModelDataId("");
+    } else {
+      setUpdateModelDataId(dataId);
+    }
+    if (!visibleAddNewModelData) {
+      setVisibleUpModelData(!visisbleUpModelData);
+    } else {
+      toast.error("Add New Project Data in Progress...");
+    }
+  };
+
   const updateModelDatahandler = () => {
     if (!visibleAddNewModelData) {
       setVisibleUpModelData(!visisbleUpModelData);
@@ -189,7 +210,7 @@ const EmpInfo = () => {
             </h1>
           </div>
           <div className="container mx-auto flex justify-between py-5 border-b">
-            <div className="left flex gap-3">
+            {/* <div className="left flex gap-3">
               <button
                 onClick={updateModelDatahandler}
                 className="flex bg-yellow-400 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-indigo-500 hover:text-gray-800"
@@ -199,7 +220,7 @@ const EmpInfo = () => {
                   <BiEdit size={23}></BiEdit>
                 </span>
               </button>
-            </div>
+            </div> */}
             <div className="right flex gap-3">
               <button
                 onClick={addNewModelDatahandler}
@@ -213,16 +234,19 @@ const EmpInfo = () => {
             </div>
           </div>
           {/* collapsable form */}
-          {visisbleUpModelData ? (
+          {visisbleUpModelData && updateModelDataId && dbSchema && dbName ? (
             <div className="container mx-auto py-5 border-b">
-              {dbName && (
-                <UpdateUserForm
-                  EmpId={EmpId}
-                  employeeget={employeeget}
-                  visisbleUpEmp={visisbleUpEmp}
-                  setVisibleUpEmphandler={setVisibleUpEmp}
-                />
-              )}
+              <h1 className="text-xl md:text-3xl text-center font-bold">
+                Data Update Form
+              </h1>
+              <br></br>
+              <UpdateDBDataForm
+                schemaFromFile={schemaFromFile}
+                dbName={dbName}
+                dbSchema={dbSchema}
+                visibleAddNewModelData={visibleAddNewModelData}
+                setVisibleAddNewModelData={setVisibleAddNewModelData}
+              />
             </div>
           ) : (
             <></>
@@ -230,6 +254,10 @@ const EmpInfo = () => {
           {/* collapsable form */}
           {visibleAddNewModelData && dbSchema && dbName ? (
             <div className="container mx-auto py-5 border-b">
+              <h1 className="text-xl md:text-3xl text-center font-bold">
+                Add Data Form
+              </h1>
+              <br></br>
               <AddDBDataForm
                 schemaFromFile={schemaFromFile}
                 dbName={dbName}
@@ -293,11 +321,11 @@ const EmpInfo = () => {
                       </div>
                       <div className="p-2">
                         <button
-                          onClick={() => viewDBhandler(model)}
+                          onClick={() => viewUpdateDBDatahandler(data._id)}
                           className="my-2 flex bg-yellow-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-yellow-500 hover:text-gray-800"
                         >
                           <span className="px-1">
-                            <BsDatabase size={23}></BsDatabase>
+                            <AiOutlineEdit size={23}></AiOutlineEdit>
                           </span>
                         </button>
                         <button
@@ -305,7 +333,7 @@ const EmpInfo = () => {
                           className="flex bg-red-500 text-white px-4 py-2 border rounded-md hover:bg-grary-50 hover:border-red-500 hover:text-gray-800"
                         >
                           <span className="px-1">
-                            <BsDatabase size={23}></BsDatabase>
+                            <BsDatabaseDash size={23}></BsDatabaseDash>
                           </span>
                         </button>
                       </div>
